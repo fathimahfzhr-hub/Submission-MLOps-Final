@@ -5,8 +5,8 @@ import mlflow
 import mlflow.sklearn
 
 # Load Data
-train = pd.read_csv('water_potability_train_clean.csv')
-test = pd.read_csv('water_potability_test_clean.csv')
+train = pd.read_csv('water_potability_preprocessing/water_potability_train_clean.csv')
+test = pd.read_csv('water_potability_preprocessing/water_potability_test_clean.csv')
 
 X_train = train.drop('Potability', axis=1)
 y_train = train['Potability']
