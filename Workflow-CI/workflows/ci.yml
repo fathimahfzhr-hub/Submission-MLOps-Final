@@ -1,0 +1,42 @@
+name: CI Pipeline - Train Model
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  train-and-log:
+    runs-on: ubuntu-latest
+    
+    # Masukkan Secrets agar bisa akses DagsHub (PENTING!)
+    env:
+      MLFLOW_TRACKING_URI: ${{ secrets.MLFLOW_TRACKING_URI }}
+      MLFLOW_TRACKING_USERNAME: ${{ secrets.MLFLOW_TRACKING_USERNAME }}
+      MLFLOW_TRACKING_PASSWORD: ${{ secrets.MLFLOW_TRACKING_PASSWORD }}
+
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    - name: Install MLflow & Conda
+      run: |
+        pip install mlflow dagshub
+        # Conda biasanya sudah ada di GitHub Actions, tapi kita update env
+        
+    - name: Run MLflow Project
+      # Ini perintah inti: Jalankan folder MLProject
+      run: mlflow run . --no-conda 
+      # Catatan: Kita pakai --no-conda di CI sederhana agar lebih cepat (pakai pip di atas), 
+      # tapi struktur file tetap memenuhi syarat MLflow Project.
+
+    - name: Archive Production Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: model-result
+        path: mlruns/  # Menyimpan log mlruns ke GitHub

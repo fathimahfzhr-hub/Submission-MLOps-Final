@@ -1,0 +1,40 @@
+name: Automasi Data Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-preprocessing:
+    runs-on: ubuntu-latest
+
+    steps:
+    # A. Ambil kode dari Repository
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    # B. Siapkan Python
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+
+    # C. Install Library (dari file requirements.txt di folder preprocessing)
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r preprocessing/requirements.txt
+
+    # D. Jalankan Script Otomatisasi
+    - name: Run Automate Script
+      run: python preprocessing/automate_Fathimah.py
+
+    # E. Simpan Hasil CSV sebagai Artefak (Bukti Sukses)
+    - name: Upload Clean Data
+      uses: actions/upload-artifact@v4
+      with:
+        name: dataset-bersih
+        path: |
+          water_potability_train_clean.csv
+          water_potability_test_clean.csv
