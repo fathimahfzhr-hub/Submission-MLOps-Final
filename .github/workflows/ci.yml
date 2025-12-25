@@ -31,7 +31,7 @@ jobs:
         
     - name: Run MLflow Project
       # Ini perintah inti: Jalankan folder MLProject
-      run: mlflow run . --no-conda 
+      run: mlflow run . --env-manager=local 
       # Catatan: Kita pakai --no-conda di CI sederhana agar lebih cepat (pakai pip di atas), 
       # tapi struktur file tetap memenuhi syarat MLflow Project.
 
